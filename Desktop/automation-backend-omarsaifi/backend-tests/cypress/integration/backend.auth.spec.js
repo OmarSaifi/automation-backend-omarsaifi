@@ -1,4 +1,5 @@
 import * as clientHelpers from '../helpers/clientHelpers'
+import * as roomHelpers from '../helpers/roomHelpers'
 
 
 
@@ -15,8 +16,13 @@ describe('Testing backend automation', function(){
     it('Test Case 3 - Create a client and delete it', function(){
         clientHelpers.createClientRequestAndDelete(cy)
     })
-    it.only('Test Case 4 - Create a client and update it', function(){
+    
+    it('Test Case 4 - Create a client and update it', function(){
         clientHelpers.createClientRequestAndPut(cy)
+    })
+    
+    it.only('Test Case 5 - Create a Room', function(){
+        roomHelpers.createRoomRequest(cy)
     })
 
            
