@@ -36,13 +36,13 @@ function getRequestAllClientsWithAssertion(cy, name, email, telephone){
         expect(responseAsString).to.have.string(telephone)
 
         cy.log(response.body[response.body.length -1].id)
-        cy.log(response.body[0].email)
-        cy.log(response.body.length)
+        //cy.log(response.body[0].email)
+        //cy.log(response.body.length)
 
     }))
 }
 
-function getAllClientsRequest(vy){
+function getAllClientsRequest(cy){
     cy.authenticateSession().then((response =>{
         cy.request({
             method: "GET",
@@ -100,7 +100,7 @@ function createClientRequest(cy){
             body:fakeClientPayload
         }).then((response =>{
             const responseAsString = JSON.stringify(response)
-            expect(responseAsString).to.have.string(fakeClientPayload.name)    
+            expect(responseAsString).to.have.string(fakeClientPayload.name, fakeClientPayload.email, fakeClientPayload.telephone)    
         }))
 
         getRequestAllClientsWithAssertion(cy, fakeClientPayload.name, fakeClientPayload.email, fakeClientPayload.telephone)
@@ -185,11 +185,57 @@ function createClientRequestAndPut(cy){
     }))
 }
 
+function getAllClientsRequestAndDelete(cy){
+    cy.authenticateSession().then((response =>{
+        cy.request({
+            method: "GET",
+            url: ENDPOINT_GET_CLIENTS,
+            headers:{
+                'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
+                'Content-Type': 'application/json'
+            },
+        }).then((response =>{
+            let lastId = response.body[response.body.length -1].id
+            cy.request({
+                method: "GET",
+                url: ENDPOINT_GET_CLIENT+lastId,
+                headers:{
+                    'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
+                    'Content-Type': 'application/json'
+                },
+            }).then((response =>{
+                const responseAsString = JSON.stringify(response)
+                cy.log(responseAsString) /// lägg till
+                expect(responseAsString).to.have.string('true')
+            }))
+        }))
+
+        deleteRequestAfterGet(cy)
+    }))
+}
+
+function getAllClientsRequestAndLogout(cy){
+    cy.authenticateSession().then((response =>{
+        cy.request({
+            method: "GET",
+            url: ENDPOINT_GET_CLIENTS,
+            headers:{
+                'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
+                'Content-Type': 'application/json'
+            },
+        }).then((response =>{
+            const responseAsString = JSON.stringify(response)
+            cy.log(responseAsString)
+        }))
+    }))
+}
+
 
 module.exports = {
     createRandomClientPayload,
     createClientRequest,
     getAllClientsRequest,
     createClientRequestAndDelete,
-    createClientRequestAndPut
+    createClientRequestAndPut,
+    getAllClientsRequestAndDelete
 }

@@ -17,13 +17,19 @@ describe('Testing backend automation', function(){
         clientHelpers.createClientRequestAndDelete(cy)
     })
     
-    it('Test Case 4 - Create a client and update it', function(){
-        clientHelpers.createClientRequestAndPut(cy)
-    })
+    //it('Test Case 4 - Create a client, update it and Delete', function(){
+        //clientHelpers.createClientRequestAndPut(cy)
+        //clientHelpers.getAllClientsRequestAndDelete(cy)
+    //})
     
-    it.only('Test Case 5 - Create a Room', function(){
+    it('Test Case 5 - Create a Room', function(){
         roomHelpers.createRoomRequest(cy)
     })
 
-           
+    it('Test Case 6 - Create a Room and delete it', function(){
+        roomHelpers.createAndDeleteRoom(cy)
+    })
+
+
+
 })

@@ -73,7 +73,62 @@ function createRoomRequest(cy){
         getRequestAllRoomsWithAssertion(cy, fakeRoomPayload.category, fakeRoomPayload.number, fakeRoomPayload.floor, fakeRoomPayload.available, fakeRoomPayload.price, fakeRoomPayload.features)
     }))
 }
+
+function deleteRequestAfterGet(cy){
+    // GET request to fetch all rooms
+    cy.request({
+        method: "GET",
+        url: ENDPOINT_GET_ROOMS,
+        headers:{
+            'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
+            'Content-Type': 'application/json'
+        },
+    }).then((response =>{
+        let lastId = response.body[response.body.length -1].id
+        cy.request({
+            method: "DELETE",
+            url: ENDPOINT_GET_ROOM+lastId,
+            headers:{
+                'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
+                'Content-Type': 'application/json'
+            },
+        }).then((response =>{
+            const responseAsString = JSON.stringify(response.body)
+            cy.log(responseAsString)
+            expect(responseAsString).to.have.string('true')
+        }))
+    }))
+}
+
+function createAndDeleteRoom(cy){
+    cy.authenticateSession().then((response =>{
+        // Create a Room
+        let fakeRoomPayload = createRandomRoomPayload()
+
+        // Post request to create a client 
+        cy.request({
+            method: "POST",
+            url: ENDPOINT_POST_ROOM,
+            headers:{
+                'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
+                'Content-Type': 'application/json'
+            },
+            body:fakeRoomPayload
+        }).then((response =>{
+            const responseAsString = JSON.stringify(response)
+            expect(responseAsString).to.have.string(fakeRoomPayload.category)    
+        }))
+
+        getRequestAllRoomsWithAssertion(cy, fakeRoomPayload.category, fakeRoomPayload.number, fakeRoomPayload.floor, fakeRoomPayload.available, fakeRoomPayload.price, fakeRoomPayload.features)
+        deleteRequestAfterGet(cy)
+    }))
+}
+
+
+
+
 module.exports = {
     createRoomRequest,
-    getRequestAllRoomsWithAssertion
+    getRequestAllRoomsWithAssertion,
+    createAndDeleteRoom
 }
