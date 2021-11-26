@@ -29,8 +29,8 @@ describe('Testing backend automation', function(){
         clientHelpers.putRequestAfterGet(cy)
     })
     
-    /*
-    it('Test Case 4 - Create a client, update it and Delete', function(){
+    /*// Hoppa över denna, har lyckats skapa en med Put.
+    it('Test Case 7 - Create a client, update it and Delete', function(){
     clientHelpers.createClientRequestAndPut(cy)
     clientHelpers.getAllClientsRequestAndDelete(cy)
     })*/

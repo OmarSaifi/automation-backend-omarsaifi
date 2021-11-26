@@ -47,8 +47,7 @@ Cypress.Commands.add('authenticateSession', () => {
     }))
 })
 
-/*
-const allClients_URL = 'http://localhost:3000/api/clients'
+/*const allClients_URL = 'http://localhost:3000/api/clients'
 
 Cypress.Commands.add('clientLastId', () => {
 
@@ -60,8 +59,7 @@ Cypress.Commands.add('clientLastId', () => {
             'Content-Type': 'application/json'
         },
     }).then((response =>{
-        
+   
         Cypress.env({allClients_URL:response.body[response.body.length-1].id})
     }))
-})
-*/
+})*/

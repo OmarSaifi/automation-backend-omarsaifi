@@ -61,7 +61,6 @@ function createRoomRequest(cy){
             const responseAsString = JSON.stringify(response.body)
             expect(responseAsString).to.have.string(fakeRoomPayload.category)    
         }))
-
         getRequestAllRoomsWithAssertion(cy, fakeRoomPayload.category, fakeRoomPayload.number, fakeRoomPayload.floor, fakeRoomPayload.available, fakeRoomPayload.price, fakeRoomPayload.features)
     }))
 }
@@ -110,7 +109,6 @@ function createAndDeleteRoom(cy){
             const responseAsString = JSON.stringify(response.body)
             expect(responseAsString).to.have.string(fakeRoomPayload.category)    
         }))
-
         getRequestAllRoomsWithAssertion(cy, fakeRoomPayload.category, fakeRoomPayload.number, fakeRoomPayload.floor, fakeRoomPayload.available, fakeRoomPayload.price, fakeRoomPayload.features)
         deleteRequestAfterGet(cy)
     }))

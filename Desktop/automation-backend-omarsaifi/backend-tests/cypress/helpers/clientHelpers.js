@@ -16,7 +16,6 @@ function createRandomClientPayload(){
         "email":fakeEmail,
         "telephone":fakePhone
     }
-
     return payload
 }
 
@@ -100,7 +99,6 @@ function createClientRequest(cy){
             const responseAsString = JSON.stringify(response.body)
             expect(responseAsString).to.have.string(fakeClientPayload.name, fakeClientPayload.email, fakeClientPayload.telephone)    
         }))
-
         getRequestAllClientsWithAssertion(cy, fakeClientPayload.name, fakeClientPayload.email, fakeClientPayload.telephone)
     }))
 }
@@ -123,7 +121,6 @@ function createClientRequestAndDelete(cy){
             const responseAsString = JSON.stringify(response.body)
             expect(responseAsString).to.have.string(fakeClientPayload.name)    
         }))
-
         deleteRequestAfterGet(cy)
     }))
 }
@@ -183,7 +180,6 @@ function createClientRequestAndPut(cy){
             const responseAsString = JSON.stringify(response.body)
             expect(responseAsString).to.have.string(fakeClientPayload.name)    
         }))
-
         putRequestAfterGet(cy)
     }))
 }
@@ -214,7 +210,6 @@ function getAllClientsRequestAndDelete(cy){
                 expect(responseAsString).to.have.string('true')
             }))
         }))
-
         deleteRequestAfterGet(cy)
     }))
 }
@@ -246,5 +241,4 @@ module.exports = {
     putRequestAfterGet,
     //createClientRequestAndPut,
     //getAllClientsRequestAndDelete
-    
 }

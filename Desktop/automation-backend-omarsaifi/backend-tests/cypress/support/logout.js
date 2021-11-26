@@ -1,4 +1,4 @@
-const LOGOUT_URL = 'http://localhost:3000/api/logout'
+/*const LOGOUT_URL = 'http://localhost:3000/api/logout'
 
 Cypress.Commands.add('logoutSession', () => {
     const userCredentials = {
@@ -19,3 +19,4 @@ Cypress.Commands.add('logoutSession', () => {
         Cypress.env({logoutToken:response.body})
     }))
 })
+*/
