@@ -46,3 +46,22 @@ Cypress.Commands.add('authenticateSession', () => {
         Cypress.env({loginToken:response.body})
     }))
 })
+
+/*
+const allClients_URL = 'http://localhost:3000/api/clients'
+
+Cypress.Commands.add('clientLastId', () => {
+
+    cy.request({
+        method: "GET",
+        url: ENDPOINT_GET_CLIENTS,
+        headers:{
+            'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
+            'Content-Type': 'application/json'
+        },
+    }).then((response =>{
+        
+        Cypress.env({allClients_URL:response.body[response.body.length-1].id})
+    }))
+})
+*/

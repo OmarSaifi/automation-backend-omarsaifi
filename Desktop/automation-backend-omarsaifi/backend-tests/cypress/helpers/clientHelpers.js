@@ -3,7 +3,7 @@ const faker = require ('faker')
 const ENDPOINT_GET_CLIENTS = 'http://localhost:3000/api/clients/'
 const ENDPOINT_GET_CLIENT = 'http://localhost:3000/api/client/'
 const ENDPOINT_POST_CLIENT = 'http://localhost:3000/api/client/new/'
-
+const ENDPOINT_PUT_CLIENT = 'http://localhost:3000/api/client/'
 
 
 function createRandomClientPayload(){
@@ -30,10 +30,8 @@ function getRequestAllClientsWithAssertion(cy, name, email, telephone){
             'Content-Type': 'application/json'
         },
     }).then((response =>{
-        const responseAsString = JSON.stringify(response)
-        expect(responseAsString).to.have.string(name)
-        expect(responseAsString).to.have.string(email)
-        expect(responseAsString).to.have.string(telephone)
+        const responseAsString = JSON.stringify(response.body)
+        expect(responseAsString).to.have.string(name, email, telephone)
 
         cy.log(response.body[response.body.length -1].id)
         //cy.log(response.body[0].email)
@@ -52,7 +50,7 @@ function getAllClientsRequest(cy){
                 'Content-Type': 'application/json'
             },
         }).then((response =>{
-            const responseAsString = JSON.stringify(response)
+            const responseAsString = JSON.stringify(response.body)
             cy.log(responseAsString)
         }))
     }))
@@ -99,7 +97,7 @@ function createClientRequest(cy){
             },
             body:fakeClientPayload
         }).then((response =>{
-            const responseAsString = JSON.stringify(response)
+            const responseAsString = JSON.stringify(response.body)
             expect(responseAsString).to.have.string(fakeClientPayload.name, fakeClientPayload.email, fakeClientPayload.telephone)    
         }))
 
@@ -122,7 +120,7 @@ function createClientRequestAndDelete(cy){
             },
             body:fakeClientPayload
         }).then((response =>{
-            const responseAsString = JSON.stringify(response)
+            const responseAsString = JSON.stringify(response.body)
             expect(responseAsString).to.have.string(fakeClientPayload.name)    
         }))
 
@@ -131,11 +129,10 @@ function createClientRequestAndDelete(cy){
 }
 
 function putRequestAfterGet(cy){
-    const putClient = {
-        "name": "Omar",
-        "email": "omars@hotmail.com",
-        "telephone": "0732365202"
-    }
+    cy.authenticateSession().then(response =>{
+        // Create a fake client
+        let fakeClientPayload = createRandomClientPayload()
+
     // GET request to fetch all clients
     cy.request({
         method: "GET",
@@ -145,10 +142,14 @@ function putRequestAfterGet(cy){
             'Content-Type': 'application/json'
         },
     }).then((response =>{
-        let lastId = response.body[response.body.length -1].id
+        const putClient = response.body[response.body.length -1]
+        putClient.name = 'Omar',
+        putClient.email = 'omar@hotmail.com'
+        putClient.telephone = '0843277384'
+
         cy.request({
             method: "PUT",
-            url: ENDPOINT_GET_CLIENT+lastId,
+            url: ENDPOINT_PUT_CLIENT + putClient.id,
             headers:{
                 'X-User-Auth': JSON.stringify(Cypress.env().loginToken),
                 'Content-Type': 'application/json'
@@ -157,11 +158,13 @@ function putRequestAfterGet(cy){
         }).then((response =>{
             const responseAsString = JSON.stringify(response.body)
             cy.log(responseAsString)
-            expect(responseAsString).to.have.string(putClient.name, putClient.email, putClient.telephone)
+            expect(responseAsString).to.have.string(putClient.id, putClient.created, putClient.name, putClient.email, putClient.telephone)
         }))
     }))
+})
 }
 
+/*
 function createClientRequestAndPut(cy){
     cy.authenticateSession().then((response =>{
         // Create a fake client
@@ -177,14 +180,16 @@ function createClientRequestAndPut(cy){
             },
             body:fakeClientPayload
         }).then((response =>{
-            const responseAsString = JSON.stringify(response)
+            const responseAsString = JSON.stringify(response.body)
             expect(responseAsString).to.have.string(fakeClientPayload.name)    
         }))
 
         putRequestAfterGet(cy)
     }))
 }
+*/
 
+/*
 function getAllClientsRequestAndDelete(cy){
     cy.authenticateSession().then((response =>{
         cy.request({
@@ -213,7 +218,9 @@ function getAllClientsRequestAndDelete(cy){
         deleteRequestAfterGet(cy)
     }))
 }
+*/
 
+/*
 function getAllClientsRequestAndLogout(cy){
     cy.authenticateSession().then((response =>{
         cy.request({
@@ -224,18 +231,20 @@ function getAllClientsRequestAndLogout(cy){
                 'Content-Type': 'application/json'
             },
         }).then((response =>{
-            const responseAsString = JSON.stringify(response)
+            const responseAsString = JSON.stringify(response.body)
             cy.log(responseAsString)
         }))
     }))
 }
-
+*/
 
 module.exports = {
     createRandomClientPayload,
     createClientRequest,
     getAllClientsRequest,
     createClientRequestAndDelete,
-    createClientRequestAndPut,
-    getAllClientsRequestAndDelete
+    putRequestAfterGet,
+    //createClientRequestAndPut,
+    //getAllClientsRequestAndDelete
+    
 }
